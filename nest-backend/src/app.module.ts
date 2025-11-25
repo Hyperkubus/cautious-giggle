@@ -1,9 +1,35 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import databaseConfig from './config/database.config';
 
 @Module({
-  imports: [],
+  imports: [
+    ConfigModule.forRoot({
+      envFilePath: ['.env.dev.local', '.env.dev'],
+      load: [databaseConfig],
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => {
+        const db = config.get('database') as ReturnType<typeof databaseConfig>;
+        return {
+          type: 'postgres',
+          host: db.host,
+          port: db.port,
+          username: db.user,
+          password: db.pass,
+          database: db.name,
+          entities: [],
+          synchronize: config.get('ENVIRONMENT') == 'development',
+          logging: config.get('ENVIRONMENT') !== 'production',
+        };
+      },
+    }),
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
