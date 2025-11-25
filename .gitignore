@@ -1,3 +1,6 @@
+# NixOS
+.direnv/
+
 # Logs
 logs
 *.log
