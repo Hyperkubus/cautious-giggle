@@ -1,4 +1,4 @@
-import { IsIBAN, IsString, IsUUID, MaxLength } from 'class-validator';
+import { IsIBAN, IsString, MaxLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 class CreateAccountDto {
