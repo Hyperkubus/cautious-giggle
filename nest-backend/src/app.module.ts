@@ -6,6 +6,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PersonsModule } from './persons/persons.module';
 import { AccountsModule } from './accounts/accounts.module';
 import databaseConfig from './config/database.config';
+import { Person } from './persons/entities/person.entity';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import databaseConfig from './config/database.config';
           username: db.user,
           password: db.pass,
           database: db.name,
-          entities: [],
+          entities: [Person],
           synchronize: config.get('ENVIRONMENT') == 'development',
           logging: config.get('ENVIRONMENT') !== 'production',
         };

@@ -14,7 +14,7 @@ import Account from '../../accounts/entities/account.entity';
 @Entity({ name: 'persons' })
 class Person {
   @PrimaryGeneratedColumn('uuid')
-  id: number;
+  id: string;
 
   @Column({ length: 100 })
   name: string;
