@@ -13,10 +13,13 @@ import Account from '../../accounts/entities/account.entity';
 @Entity({ name: 'transactions' })
 class Transaction {
   @PrimaryGeneratedColumn('uuid')
-  id: number;
+  id: string;
 
   @Column()
-  balance: number;
+  amount: number;
+
+  @Column({ length: 140 })
+  description: string;
 
   @ManyToOne(() => Account, (account) => account.transactions, {
     onDelete: 'CASCADE',
