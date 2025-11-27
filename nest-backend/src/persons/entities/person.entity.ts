@@ -5,12 +5,14 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import Account from '../../accounts/entities/account.entity';
 
 @Entity({ name: 'persons' })
-export class Person {
+class Person {
   @PrimaryGeneratedColumn('uuid')
   id: number;
 
@@ -23,9 +25,8 @@ export class Person {
   @Column({ default: 0 })
   networth: number;
 
-  //ToDo: Add Account Relation
-  /*@OneToMany(() => Account, (account) => account.owner)
-  accounts: AccountEntity[];*/
+  @OneToMany(() => Account, (account) => account.owner)
+  accounts: Account[];
 
   @ManyToMany(() => Person, (person) => person.friends)
   @JoinTable({
@@ -44,3 +45,5 @@ export class Person {
   @DeleteDateColumn()
   deletedAt?: Date | null;
 }
+
+export default Person;
