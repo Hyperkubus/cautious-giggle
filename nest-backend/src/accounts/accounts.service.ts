@@ -1,26 +1,37 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAccountDto } from './dto/create-account.dto';
+import CreateAccountDto from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import Account from './entities/account.entity';
+import Person from '../persons/entities/person.entity';
 
 @Injectable()
 export class AccountsService {
-  create(createAccountDto: CreateAccountDto) {
-    return 'This action adds a new account';
+  constructor(
+    @InjectRepository(Account) private accountRepository: Repository<Account>,
+  ) {}
+  create(owner: Person, createAccountDto: CreateAccountDto) {
+    const newAccount = this.accountRepository.create({
+      owner: owner,
+      ...createAccountDto,
+    });
+    return this.accountRepository.save(newAccount);
   }
 
   findAll() {
-    return `This action returns all accounts`;
+    return this.accountRepository.findAndCount();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} account`;
+  findOne(iban: string) {
+    return this.accountRepository.findOneBy({ iban: iban });
   }
 
-  update(id: number, updateAccountDto: UpdateAccountDto) {
-    return `This action updates a #${id} account`;
+  update(iban: string, updateAccountDto: UpdateAccountDto) {
+    return this.accountRepository.save({ iban: iban, ...updateAccountDto });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} account`;
+  remove(iban: string) {
+    return this.accountRepository.softDelete({ iban: iban });
   }
 }

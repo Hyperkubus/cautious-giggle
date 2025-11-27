@@ -5,10 +5,12 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import Person from '../../persons/entities/person.entity';
+import Transaction from '../../transactions/entities/transaction.entity';
 
 @Entity({ name: 'accounts' })
 class Account {
@@ -24,9 +26,8 @@ class Account {
   @JoinColumn({ name: 'person_id' })
   owner: Person;
 
-  //ToDo: Add Tramsactions
-  /*@OneToMany(() => Transaction,(transaction) => transaction.account,)
-  transactions: Transaction[];*/
+  @OneToMany(() => Transaction, (transaction) => transaction.account)
+  transactions: Transaction[];
 
   @CreateDateColumn()
   createdAt: Date;
