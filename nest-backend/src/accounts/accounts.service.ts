@@ -23,6 +23,10 @@ export class AccountsService {
     return this.accountRepository.findAndCount();
   }
 
+  findAllOfOwner(owner: Person) {
+    return this.accountRepository.findAndCountBy({ owner: owner });
+  }
+
   findOne(iban: string) {
     return this.accountRepository.findOneBy({ iban: iban });
   }

@@ -13,7 +13,7 @@ async function bootstrap() {
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Cautious Giggle')
-    .setDescription('Api description for Scalara coding challenge')
+    .setDescription('Api description for Scalara coding challenge.')
     .setVersion('1.0')
     .build();
   const documentFactory = () =>
@@ -22,4 +22,5 @@ async function bootstrap() {
 
   await app.listen(process.env.PORT ?? 3000);
 }
+// noinspection JSIgnoredPromiseFromCall
 bootstrap();

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -21,15 +21,23 @@ export class PersonsService {
     return this.personRepository.findAndCount();
   }
 
-  findOne(id: string) {
-    return this.personRepository.findOneBy({ id: id });
+  findOne(uuid: string) {
+    return this.personRepository.findOneBy({ id: uuid });
   }
 
-  update(id: string, updatePersonDto: UpdatePersonDto) {
-    return this.personRepository.save({ id: id, ...updatePersonDto });
+  async findOneOrThrowException(uuid: string) {
+    const person = await this.findOne(uuid);
+    if (!person) {
+      throw new NotFoundException(`Person with UUID ${uuid} not found.`);
+    }
+    return person;
   }
 
-  remove(id: string) {
-    return this.personRepository.softDelete({ id: id });
+  update(uuid: string, updatePersonDto: UpdatePersonDto) {
+    return this.personRepository.save({ id: uuid, ...updatePersonDto });
+  }
+
+  remove(uuid: string) {
+    return this.personRepository.softDelete({ id: uuid });
   }
 }

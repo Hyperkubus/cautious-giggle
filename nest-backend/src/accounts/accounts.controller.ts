@@ -1,36 +1,26 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Body, Patch, Param, Delete } from '@nestjs/common';
 import { AccountsService } from './accounts.service';
-import CreateAccountDto from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
+import { ApiOperation } from '@nestjs/swagger';
 
 @Controller('accounts')
 export class AccountsController {
   constructor(private readonly accountsService: AccountsService) {}
 
-  @Post()
-  create(@Body() createAccountDto: CreateAccountDto) {
-    return this.accountsService.create(createAccountDto);
-  }
-
   @Get()
+  @ApiOperation({ summary: 'List all accounts.' })
   findAll() {
     return this.accountsService.findAll();
   }
 
   @Get(':iban')
+  @ApiOperation({ summary: 'Get account details.' })
   findOne(@Param('iban') iban: string) {
     return this.accountsService.findOne(iban);
   }
 
   @Patch(':iban')
+  @ApiOperation({ summary: 'Update account.' })
   update(
     @Param('iban') iban: string,
     @Body() updateAccountDto: UpdateAccountDto,
@@ -39,6 +29,7 @@ export class AccountsController {
   }
 
   @Delete(':iban')
+  @ApiOperation({ summary: 'Delete account.' })
   remove(@Param('iban') iban: string) {
     return this.accountsService.remove(iban);
   }

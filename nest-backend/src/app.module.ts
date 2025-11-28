@@ -7,12 +7,20 @@ import { PersonsModule } from './persons/persons.module';
 import { AccountsModule } from './accounts/accounts.module';
 import { TransactionsModule } from './transactions/transactions.module';
 import databaseConfig from './config/database.config';
-import { Person } from './persons/entities/person.entity';
+import Person from './persons/entities/person.entity';
+import Account from './accounts/entities/account.entity';
+import Transaction from './transactions/entities/transaction.entity';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: ['.env.dev.local', '.env.dev'],
+      envFilePath: [
+        '.env.dev.local',
+        '.env.dev',
+        '.env.prod.local',
+        '.env.prod',
+        '.env.docker',
+      ],
       load: [databaseConfig],
     }),
     TypeOrmModule.forRootAsync({
@@ -27,7 +35,7 @@ import { Person } from './persons/entities/person.entity';
           username: db.user,
           password: db.pass,
           database: db.name,
-          entities: [Person],
+          entities: [Person, Account, Transaction],
           synchronize: config.get('ENVIRONMENT') == 'development',
           logging: config.get('ENVIRONMENT') !== 'production',
         };

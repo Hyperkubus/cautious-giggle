@@ -1,10 +1,4 @@
-import {
-  IsEmail,
-  IsNumber,
-  IsOptional,
-  IsString,
-  MaxLength,
-} from 'class-validator';
+import { IsEmail, IsString, MaxLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreatePersonDto {
@@ -19,9 +13,4 @@ export class CreatePersonDto {
     example: 'hp.b@cityroll.er',
   })
   email: string;
-
-  @IsNumber({ maxDecimalPlaces: 0 })
-  @IsOptional()
-  @ApiProperty({ description: 'Initial networth', example: 0, required: false })
-  networth: number;
 }

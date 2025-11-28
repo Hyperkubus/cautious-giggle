@@ -1,4 +1,11 @@
 services:
+  backend:
+    build:
+      context: ./nest-backend
+      dockerfile: Dockerfile    
+    ports:
+      - 8080:3000
+
   db:
     image: postgres:16
     container_name: backend-db
