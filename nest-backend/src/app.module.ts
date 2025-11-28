@@ -14,13 +14,7 @@ import Transaction from './transactions/entities/transaction.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: [
-        '.env.dev.local',
-        '.env.dev',
-        '.env.prod.local',
-        '.env.prod',
-        '.env.docker',
-      ],
+      envFilePath: ['.env.local', '.env.dev', '.env.prod', '.env.docker'],
       load: [databaseConfig],
     }),
     TypeOrmModule.forRootAsync({
