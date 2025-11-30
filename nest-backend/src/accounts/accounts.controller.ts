@@ -1,8 +1,21 @@
-import { Controller, Get, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseInterceptors,
+  UseFilters,
+} from '@nestjs/common';
 import { AccountsService } from './accounts.service';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { ApiOperation } from '@nestjs/swagger';
+import { FormatResponseInterceptor } from '../common/interceptors/formatResponse.interceptor';
+import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
 
+@UseInterceptors(FormatResponseInterceptor)
+@UseFilters(new HttpExceptionFilter())
 @Controller('accounts')
 export class AccountsController {
   constructor(private readonly accountsService: AccountsService) {}

@@ -6,14 +6,24 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
+  UseInterceptors,
+  UseFilters,
+  ParseUUIDPipe,
+  NotFoundException,
 } from '@nestjs/common';
 import { PersonsService } from './persons.service';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiOperation, ApiQuery } from '@nestjs/swagger';
+import { LendableAmountCalculationMethodEnum } from './enums/lendableAmountCalculationMethod.enum';
+import { FormatResponseInterceptor } from '../common/interceptors/formatResponse.interceptor';
+import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
 
+@UseInterceptors(FormatResponseInterceptor)
+@UseFilters(new HttpExceptionFilter())
 @Controller('persons')
-export class PersonsController {
+class PersonsController {
   constructor(private readonly personsService: PersonsService) {}
 
   @Post()
@@ -30,14 +40,17 @@ export class PersonsController {
 
   @Get(':uuid')
   @ApiOperation({ summary: 'List person with id' })
-  findOne(@Param('uuid') uuid: string) {
-    return this.personsService.findOne(uuid);
+  async findOne(@Param('uuid', new ParseUUIDPipe()) uuid: string) {
+    const person = await this.personsService.findOne(uuid);
+    if (!person)
+      throw new NotFoundException(`Person with UUID ${uuid} not found`);
+    return person;
   }
 
   @Patch(':uuid')
   @ApiOperation({ summary: 'Update person.' })
   update(
-    @Param('uuid') uuid: string,
+    @Param('uuid', new ParseUUIDPipe()) uuid: string,
     @Body() updatePersonDto: UpdatePersonDto,
   ) {
     return this.personsService.update(uuid, updatePersonDto);
@@ -45,7 +58,23 @@ export class PersonsController {
 
   @Delete(':uuid')
   @ApiOperation({ summary: 'Delete person.' })
-  remove(@Param('uuid') uuid: string) {
+  remove(@Param('uuid', new ParseUUIDPipe()) uuid: string) {
     return this.personsService.remove(uuid);
   }
+
+  @Get(':uuid/lendableAmount')
+  @ApiOperation({ summary: 'Get maximal lendable amount for person' })
+  @ApiQuery({
+    name: 'method',
+    enum: LendableAmountCalculationMethodEnum,
+    required: true,
+  })
+  getLendableAmount(
+    @Param('uuid', new ParseUUIDPipe()) uuid: string,
+    @Query('method') method: LendableAmountCalculationMethodEnum,
+  ) {
+    return this.personsService.getLendableAmount(uuid, method);
+  }
 }
+
+export default PersonsController;

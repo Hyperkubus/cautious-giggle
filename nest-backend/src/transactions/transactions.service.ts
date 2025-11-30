@@ -17,11 +17,17 @@ export class TransactionsService {
       account: account,
       ...createTransactionDto,
     });
-    return this.transactionRepository.save(newTransaction);
+    return this.transactionRepository.insert(newTransaction);
   }
 
   findAll() {
     return this.transactionRepository.findAndCount();
+  }
+
+  findAllOfAccount(account: Account) {
+    return this.transactionRepository.findAndCountBy({
+      account: account,
+    });
   }
 
   findOne(id: string) {
@@ -29,7 +35,10 @@ export class TransactionsService {
   }
 
   update(id: string, updateTransactionDto: UpdateTransactionDto) {
-    return this.transactionRepository.save({ id: id, ...updateTransactionDto });
+    return this.transactionRepository.update(
+      { id: id },
+      { ...updateTransactionDto },
+    );
   }
 
   remove(id: string) {

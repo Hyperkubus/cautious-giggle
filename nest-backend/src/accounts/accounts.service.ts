@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import CreateAccountDto from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -16,7 +16,7 @@ export class AccountsService {
       owner: owner,
       ...createAccountDto,
     });
-    return this.accountRepository.save(newAccount);
+    return this.accountRepository.insert(newAccount);
   }
 
   findAll() {
@@ -31,8 +31,19 @@ export class AccountsService {
     return this.accountRepository.findOneBy({ iban: iban });
   }
 
+  async findOneOrThrowException(iban: string) {
+    const account = await this.accountRepository.findOneBy({ iban: iban });
+    if (!account) {
+      throw new NotFoundException(`Account with IBAN ${iban} not found.`);
+    }
+    return account;
+  }
+
   update(iban: string, updateAccountDto: UpdateAccountDto) {
-    return this.accountRepository.save({ iban: iban, ...updateAccountDto });
+    return this.accountRepository.update(
+      { iban: iban },
+      { ...updateAccountDto },
+    );
   }
 
   remove(iban: string) {

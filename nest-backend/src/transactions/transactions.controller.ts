@@ -7,12 +7,15 @@ import {
   Param,
   Delete,
   NotFoundException,
+  UseInterceptors,
 } from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { AccountsService } from '../accounts/accounts.service';
+import { FormatResponseInterceptor } from '../common/interceptors/formatResponse.interceptor';
 
+@UseInterceptors(FormatResponseInterceptor)
 @Controller('transactions')
 export class TransactionsController {
   constructor(

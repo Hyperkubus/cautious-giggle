@@ -26,6 +26,9 @@ class Account {
   @JoinColumn({ name: 'person_id' })
   owner: Person;
 
+  @Column()
+  balance: number;
+
   @OneToMany(() => Transaction, (transaction) => transaction.account)
   transactions: Transaction[];
 

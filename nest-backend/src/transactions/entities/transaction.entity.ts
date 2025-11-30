@@ -27,6 +27,9 @@ class Transaction {
   @JoinColumn({ name: 'iban' })
   account: Account;
 
+  @Column({ type: 'timestamp', nullable: true })
+  processedAt?: Date | null;
+
   @CreateDateColumn()
   createdAt: Date;
 

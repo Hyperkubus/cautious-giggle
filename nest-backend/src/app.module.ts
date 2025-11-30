@@ -6,6 +6,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PersonsModule } from './persons/persons.module';
 import { AccountsModule } from './accounts/accounts.module';
 import { TransactionsModule } from './transactions/transactions.module';
+import { ProcessModule } from './process/process.module';
 import databaseConfig from './config/database.config';
 import Person from './persons/entities/person.entity';
 import Account from './accounts/entities/account.entity';
@@ -38,6 +39,7 @@ import Transaction from './transactions/entities/transaction.entity';
     PersonsModule,
     AccountsModule,
     TransactionsModule,
+    ProcessModule,
   ],
   controllers: [AppController],
   providers: [AppService],
