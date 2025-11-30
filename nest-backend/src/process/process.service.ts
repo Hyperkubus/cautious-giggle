@@ -1,22 +1,23 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import Person from '../persons/entities/person.entity';
-import { Repository } from 'typeorm';
-import Account from '../accounts/entities/account.entity';
-import Transaction from '../transactions/entities/transaction.entity';
+import { AccountsService } from '../accounts/accounts.service';
+import { PersonsService } from '../persons/persons.service';
 
 @Injectable()
 export class ProcessService {
   constructor(
-    @InjectRepository(Person) private personRepository: Repository<Person>,
-    @InjectRepository(Account) private accountRepository: Repository<Account>,
-    @InjectRepository(Transaction)
-    private transactionRepository: Repository<Transaction>,
+    private readonly accountsService: AccountsService,
+    private readonly personsService: PersonsService,
   ) {}
 
-  calculateAccountBalance() {}
+  calculateAccountBalance() {
+    return this.accountsService.recalculateAllBalances(false);
+  }
 
-  calculateNetworth() {}
+  calculateNetworth() {
+    return this.personsService.recalculateNetworth();
+  }
 
-  calculateMaxLendableAmount() {}
+  calculateMaxLendableAmount() {
+    return this.personsService.calculateBorrowableAmounts();
+  }
 }

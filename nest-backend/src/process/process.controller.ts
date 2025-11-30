@@ -7,7 +7,6 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { ProcessService } from './process.service';
-import { PersonsService } from '../persons/persons.service';
 import { ProcessEnum } from './enums/process.enum';
 import { FormatResponseInterceptor } from '../common/interceptors/formatResponse.interceptor';
 import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
@@ -16,10 +15,7 @@ import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
 @UseFilters(new HttpExceptionFilter())
 @Controller('process')
 export class ProcessController {
-  constructor(
-    private readonly processService: ProcessService,
-    private readonly personsService: PersonsService,
-  ) {}
+  constructor(private readonly processService: ProcessService) {}
 
   @Post()
   @ApiOperation({ summary: 'Call process.' })
@@ -28,17 +24,16 @@ export class ProcessController {
     enum: ProcessEnum,
     required: true,
   })
-  create(@Query('process') process: ProcessEnum) {
+  async create(@Query('process') process: ProcessEnum) {
     if (process >= ProcessEnum.accountsBalance) {
-      this.processService.calculateAccountBalance();
+      await this.processService.calculateAccountBalance();
     }
     if (process >= ProcessEnum.personsNetworth) {
-      this.processService.calculateNetworth();
+      await this.processService.calculateNetworth();
     }
     if (process >= ProcessEnum.maxLendableAmount) {
-      this.processService.calculateMaxLendableAmount();
+      await this.processService.calculateMaxLendableAmount();
     }
-
-    return true;
+    return;
   }
 }

@@ -25,10 +25,13 @@ class Person {
   @Column({ default: 0 })
   networth: number;
 
-  @OneToMany(() => Account, (account) => account.owner)
+  @Column({ default: 0 })
+  borrowableAmount: number;
+
+  @OneToMany(() => Account, (account) => account.owner, { onDelete: 'CASCADE' })
   accounts: Account[];
 
-  @ManyToMany(() => Person, (person) => person.friends)
+  @ManyToMany(() => Person, (person) => person.friends, { onDelete: 'CASCADE' })
   @JoinTable({
     name: 'person_friends',
     joinColumn: { name: 'person_id', referencedColumnName: 'id' },

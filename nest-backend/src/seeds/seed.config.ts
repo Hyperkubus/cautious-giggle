@@ -9,7 +9,7 @@ export interface SeedConfig {
 }
 
 export const defaultSeedConfig: SeedConfig = {
-  persons: 215,
+  persons: 235,
   minFriendsPerPerson: 0,
   maxFriendsPerPerson: 6,
   minAccountsPerPerson: 1,

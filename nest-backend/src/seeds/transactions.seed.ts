@@ -12,8 +12,6 @@ export async function seedTransactions(
 ) {
   const transactionRepo = dataSource.getRepository(Transaction);
 
-  await transactionRepo.delete({});
-
   const allTx: Transaction[] = [];
   const now = new Date();
 
@@ -25,10 +23,11 @@ export async function seedTransactions(
 
     for (let i = 0; i < transactionCount; i++) {
       let processed: Date | null = null;
-      const amount = randomInt(-5000, 5000); // if you store as plain number (e.g. 2 decimals)
+      const amount = randomInt(-500, 500000); // if you store as plain number (e.g. 2 decimals)
       if (randomInt(2) >= 1) processed = new Date(now.getTime());
       const tx = transactionRepo.create({
-        account: account,
+        account: { iban: account.iban } as Account,
+        description: 'seeded transaction',
         amount: amount, // or 'balanceAfter'
         processedAt: processed,
       });

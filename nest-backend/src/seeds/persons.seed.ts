@@ -11,9 +11,6 @@ function randomInt(min: number, max: number): number {
 export async function seedPersons(dataSource: DataSource, config: SeedConfig) {
   const personRepo = dataSource.getRepository(Person);
 
-  // Clean slate (dev only!)
-  await personRepo.delete({});
-
   // 1) Create N persons
   const persons: Person[] = [];
 

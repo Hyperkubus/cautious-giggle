@@ -15,8 +15,6 @@ export async function seedAccounts(
 ) {
   const accountRepo = dataSource.getRepository(Account);
 
-  await accountRepo.delete({});
-
   const accounts: Account[] = [];
   let ibanCounter = 1;
 
@@ -30,7 +28,7 @@ export async function seedAccounts(
       const ibanSuffix = String(ibanCounter).padStart(10, '0');
       const account = accountRepo.create({
         iban: `DE0012345678${ibanSuffix}`,
-        owner: person,
+        owner: { id: person.id } as Person,
         balance: randomInt(-10000000, 10000000), // e.g. 1.00 – 100.00 if cents
       });
 

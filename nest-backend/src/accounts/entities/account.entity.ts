@@ -29,7 +29,9 @@ class Account {
   @Column()
   balance: number;
 
-  @OneToMany(() => Transaction, (transaction) => transaction.account)
+  @OneToMany(() => Transaction, (transaction) => transaction.account, {
+    onDelete: 'CASCADE',
+  })
   transactions: Transaction[];
 
   @CreateDateColumn()

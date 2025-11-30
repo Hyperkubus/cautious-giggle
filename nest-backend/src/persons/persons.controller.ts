@@ -6,7 +6,6 @@ import {
   Patch,
   Param,
   Delete,
-  Query,
   UseInterceptors,
   UseFilters,
   ParseUUIDPipe,
@@ -15,10 +14,10 @@ import {
 import { PersonsService } from './persons.service';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
-import { ApiOperation, ApiQuery } from '@nestjs/swagger';
-import { LendableAmountCalculationMethodEnum } from './enums/lendableAmountCalculationMethod.enum';
+import { ApiOperation } from '@nestjs/swagger';
 import { FormatResponseInterceptor } from '../common/interceptors/formatResponse.interceptor';
 import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
+import { FriendshipDto } from './dto/friendship.dto';
 
 @UseInterceptors(FormatResponseInterceptor)
 @UseFilters(new HttpExceptionFilter())
@@ -62,18 +61,27 @@ class PersonsController {
     return this.personsService.remove(uuid);
   }
 
-  @Get(':uuid/lendableAmount')
-  @ApiOperation({ summary: 'Get maximal lendable amount for person' })
-  @ApiQuery({
-    name: 'method',
-    enum: LendableAmountCalculationMethodEnum,
-    required: true,
-  })
-  getLendableAmount(
-    @Param('uuid', new ParseUUIDPipe()) uuid: string,
-    @Query('method') method: LendableAmountCalculationMethodEnum,
+  @Get(':uuid/friends')
+  @ApiOperation({ summary: 'Get person with friends.' })
+  getWithFriends(@Param('uuid', new ParseUUIDPipe()) uuid: string) {
+    return this.personsService.loadWithFriends(uuid);
+  }
+  @Post(':uuid/friends')
+  @ApiOperation({ summary: 'Add friend to person.' })
+  addFriend(
+    @Param('uuid', new ParseUUIDPipe()) personId: string,
+    @Body() friendshipDto: FriendshipDto,
   ) {
-    return this.personsService.getLendableAmount(uuid, method);
+    return this.personsService.addFriendship(personId, friendshipDto.uuid);
+  }
+
+  @Delete(':uuid/friends')
+  @ApiOperation({ summary: 'Remove friend from person.' })
+  removeFriend(
+    @Param('uuid', new ParseUUIDPipe()) personId: string,
+    @Body() friendshipDto: FriendshipDto,
+  ) {
+    return this.personsService.deleteFriendship(personId, friendshipDto.uuid);
   }
 }
 

@@ -38,7 +38,6 @@ export class AccountsPersonController {
   @Get(':ownerId/accounts')
   @ApiOperation({ summary: 'List all of owners accounts.' })
   async findAll(@Param('ownerId', new ParseUUIDPipe()) ownerId: string) {
-    const owner = await this.personService.findOneOrThrowException(ownerId);
-    return this.accountsService.findAllOfOwner(owner);
+    return this.accountsService.findAllOfOwner(ownerId);
   }
 }
