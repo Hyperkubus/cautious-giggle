@@ -1,4 +1,3 @@
-// src/seeds/accounts.seed.ts
 import { DataSource } from 'typeorm';
 import Account from '../accounts/entities/account.entity';
 import Person from '../persons/entities/person.entity';
@@ -29,7 +28,7 @@ export async function seedAccounts(
       const account = accountRepo.create({
         iban: `DE0012345678${ibanSuffix}`,
         owner: { id: person.id } as Person,
-        balance: randomInt(-10000000, 10000000), // e.g. 1.00 – 100.00 if cents
+        balance: randomInt(-10000000, 10000000),
       });
 
       accounts.push(account);
