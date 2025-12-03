@@ -5,10 +5,12 @@ Scalara Coding Challenge
 ### How to
 Easiest way to run this is by using the supplied docker-compose.yml  
 ```docker-compose up```
+the api is reachable at port 8080 and the documentation at /api
 
 Alternativly inside of `nest-backend` make copy of `.env.docker` named `.env.local` and point it towards a valid postgres database.
 You can then run NestJS directly through
 `yarn start`
+api port is 3030 in this case
 
 ### Seed data
 You can seed some test date through:

@@ -11,8 +11,10 @@ import { TransactionsService } from './transactions.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { AccountsService } from '../accounts/accounts.service';
 import { FormatResponseInterceptor } from '../common/interceptors/formatResponse.interceptor';
+import { ApiTags } from '@nestjs/swagger';
 
 @UseInterceptors(FormatResponseInterceptor)
+@ApiTags('Accounts')
 @Controller('accounts')
 export class TransactionsAccountController {
   constructor(

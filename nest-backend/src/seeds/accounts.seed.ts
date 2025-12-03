@@ -2,10 +2,7 @@ import { DataSource } from 'typeorm';
 import Account from '../accounts/entities/account.entity';
 import Person from '../persons/entities/person.entity';
 import { SeedConfig } from './seed.config';
-
-function randomInt(min: number, max: number): number {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+import { randomInt } from 'node:crypto';
 
 export async function seedAccounts(
   dataSource: DataSource,

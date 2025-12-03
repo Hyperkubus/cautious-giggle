@@ -23,18 +23,6 @@ export class TransactionsController {
     private readonly accountService: AccountsService,
   ) {}
 
-  @Post('account/:iban/transaction')
-  async create(
-    @Param('iban') iban: string,
-    @Body() createTransactionDto: CreateTransactionDto,
-  ) {
-    const account = await this.accountService.findOne(iban);
-    if (!account) {
-      throw new NotFoundException(`Account ${iban} not found.`);
-    }
-    return this.transactionsService.create(account, createTransactionDto);
-  }
-
   @Get()
   findAll() {
     return this.transactionsService.findAll();
